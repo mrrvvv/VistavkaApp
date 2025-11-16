@@ -1,0 +1,129 @@
+﻿@page "/bilets/create"
+@using Microsoft.EntityFrameworkCore
+@using VistavkaApp.Data
+@inject IDbContextFactory<VistavkaApp.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Добавление</PageTitle>
+
+<h1>Добавление</h1>
+
+@* <h2>Bilet</h2> *@
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="Bilet" OnValidSubmit="AddBilet" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" role="alert"/>
+
+            @if (op == 1)
+            {
+                <div class="mb-3">
+                    <label for="posetitelid" class="form-label">Посетитель:</label>
+                    <InputSelect id="posetitelid" @bind-Value="Bilet.PosetitelId" class="form-control">
+                        <option value="">...</option>
+                        @if(Posetitels !=null)
+                        {
+                           @foreach(var posetitel in Posetitels)
+                            {
+                                <option value="@posetitel.PosetitelId">@posetitel.PosetitelName</option>                         
+                            }
+                        }
+                        
+                    </InputSelect>
+                    <ValidationMessage For="() => Bilet.PosetitelId" class="text-danger" />
+                </div>
+                <input type="hidden" name="Bilet.VistavkaId" id="posetitelid" @bind="Bilet.VistavkaId" />
+            }
+
+            @if (op == 2)
+            {
+                <div class="mb-3">
+                    <label for="vistavkaid" class="form-label">Выставка:</label>
+                    <InputSelect id="vistavkaid" @bind-Value="Bilet.VistavkaId" class="form-control">
+                        <option value="">...</option>
+                        @if (Vistavkas != null)
+                        {
+                            @foreach (var vistavka in Vistavkas)
+                            {
+                                <option value="@vistavka.VistavkaId">@vistavka.VistavkaName</option>
+                            }
+                        }
+
+                    </InputSelect>
+                    <ValidationMessage For="() => Bilet.VistavkaId" class="text-danger" />
+                </div>
+                <input type="hidden" name="Bilet.PosetitelId" id="vistavkaid" @bind="Bilet.PosetitelId" />
+            }
+            @* <div class="mb-3">
+                <label for="posetitelid" class="form-label">PosetitelId:</label> 
+                <InputNumber id="posetitelid" @bind-Value="Bilet.PosetitelId" class="form-control" /> 
+                <ValidationMessage For="() => Bilet.PosetitelId" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="vistavkaid" class="form-label">VistavkaId:</label> 
+                <InputNumber id="vistavkaid" @bind-Value="Bilet.VistavkaId" class="form-control" /> 
+                <ValidationMessage For="() => Bilet.VistavkaId" class="text-danger" /> 
+            </div>         *@
+            <div class="mb-3">
+                <label for="datevisit" class="form-label">Дата посещения:</label> 
+                <InputDate id="datevisit" @bind-Value="Bilet.DateVisit" class="form-control" /> 
+                <ValidationMessage For="() => Bilet.DateVisit" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="price" class="form-label">Стоимость:</label> 
+                <InputNumber id="price" @bind-Value="Bilet.Price" class="form-control" /> 
+                <ValidationMessage For="() => Bilet.Price" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Добавить</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="@($"bilets?id={id}&op={op}")">Возврат к списку билетов</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private int? id { get; set; }
+
+    [SupplyParameterFromQuery]
+    private int? op { get; set; }
+
+    public IEnumerable<Vistavka> Vistavkas = default!;
+
+    public IEnumerable<Posetitel> Posetitels = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        if (id == null || op == null)
+        {
+            NavigationManager.NavigateTo("not found");
+        }
+        //
+        if(op == 1)
+        {
+            Posetitels = await context.Posetitels.ToListAsync();
+            Bilet.VistavkaId = id;
+        }
+        else
+        {
+            Vistavkas = await context.Vistavkas.ToListAsync();
+            Bilet.PosetitelId = id;
+        }
+    }
+
+    [SupplyParameterFromForm]
+    private Bilet Bilet { get; set; } = new();
+
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddBilet()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Bilets.Add(Bilet);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/bilets?id="+id.ToString()+"&op="+op.ToString());
+    }
+}

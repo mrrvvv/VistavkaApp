@@ -1,0 +1,109 @@
+﻿@page "/posetitels/edit"
+@using Microsoft.EntityFrameworkCore
+@using VistavkaApp.Data
+@inject IDbContextFactory<VistavkaApp.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Редактирование</PageTitle>
+
+<h1>Редактирование</h1>
+
+@* <h2>Posetitel</h2> *@
+<hr />
+@if (Posetitel is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="Posetitel" OnValidSubmit="UpdatePosetitel" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary role="alert"/>
+                <input type="hidden" name="Posetitel.PosetitelId" value="@Posetitel.PosetitelId" />
+                <div class="mb-3">
+                    <label for="posetitelname" class="form-label">Имя:</label>
+                    <InputText id="posetitelname" @bind-Value="Posetitel.PosetitelName" class="form-control" />
+                    <ValidationMessage For="() => Posetitel.PosetitelName" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="posetitelsurname" class="form-label">Фамилия:</label>
+                    <InputText id="posetitelsurname" @bind-Value="Posetitel.PosetitelSurname" class="form-control" />
+                    <ValidationMessage For="() => Posetitel.PosetitelSurname" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="datebirth" class="form-label">Дата рождения:</label>
+                    <InputDate id="datebirth" @bind-Value="Posetitel.DateBirth" class="form-control" />
+                    <ValidationMessage For="() => Posetitel.DateBirth" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Телефон:</label>
+                    <InputNumber id="phone" @bind-Value="Posetitel.Phone" class="form-control" />
+                    <ValidationMessage For="() => Posetitel.Phone" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <InputText id="email" @bind-Value="Posetitel.Email" class="form-control" />
+                    <ValidationMessage For="() => Posetitel.Email" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/posetitels">Ыозырат к спику посетителей</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private int PosetitelId { get; set; }
+
+    [SupplyParameterFromForm]
+    private Posetitel? Posetitel { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        Posetitel ??= await context.Posetitels.FirstOrDefaultAsync(m => m.PosetitelId == PosetitelId);
+
+        if (Posetitel is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdatePosetitel()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Attach(Posetitel!).State = EntityState.Modified;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!PosetitelExists(Posetitel!.PosetitelId))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/posetitels");
+    }
+
+    private bool PosetitelExists(int posetitelid)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.Posetitels.Any(e => e.PosetitelId == posetitelid);
+    }
+}

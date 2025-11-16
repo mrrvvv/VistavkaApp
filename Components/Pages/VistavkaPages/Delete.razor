@@ -1,0 +1,71 @@
+﻿@page "/vistavkas/delete"
+@using Microsoft.EntityFrameworkCore
+@using VistavkaApp.Data
+@inject IDbContextFactory<VistavkaApp.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Удаление</PageTitle>
+
+<h1>Удалениe</h1>
+
+<p>Вы уверены, что хотите удалить запись?</p>
+<div>
+    @* <h2>Vistavka</h2> *@
+    <hr />
+    @if (vistavka is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Название</dt>
+            <dd class="col-sm-10">@vistavka.VistavkaName</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Описание</dt>
+            <dd class="col-sm-10">@vistavka.Description</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Начало</dt>
+            <dd class="col-sm-10">@vistavka.DateStart</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Конец</dt>
+            <dd class="col-sm-10">@vistavka.DateEnd</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Место</dt>
+            <dd class="col-sm-10">@vistavka.Place</dd>
+        </dl>
+        <EditForm method="post" Model="vistavka" OnValidSubmit="DeleteVistavka" FormName="delete" Enhance>
+            <button type="submit" class="btn btn-danger" disabled="@(vistavka is null)">Удалить</button> |
+            <a href="/vistavkas">Возврат к списку выставок</a>
+        </EditForm>
+    }
+</div>
+
+@code {
+    private Vistavka? vistavka;
+
+    [SupplyParameterFromQuery]
+    private int VistavkaId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        vistavka = await context.Vistavkas.FirstOrDefaultAsync(m => m.VistavkaId == VistavkaId);
+
+        if (vistavka is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    private async Task DeleteVistavka()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Vistavkas.Remove(vistavka!);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/vistavkas");
+    }
+}

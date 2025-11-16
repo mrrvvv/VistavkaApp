@@ -1,0 +1,161 @@
+﻿@page "/bilets/edit"
+@using Microsoft.EntityFrameworkCore
+@using VistavkaApp.Data
+@inject IDbContextFactory<VistavkaApp.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Редактирование</PageTitle>
+
+<h1>Редактирование</h1>
+
+@* <h2>Bilet</h2> *@
+<hr />
+@if (Bilet is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="Bilet" OnValidSubmit="UpdateBilet" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary role="alert"/>
+                <input type="hidden" name="Bilet.BiletId" value="@Bilet.BiletId" />
+
+                @if (op == 1)
+                {
+                    <div class="mb-3">
+                        <label for="posetitelid" class="form-label">Посетитель:</label>
+                        <InputSelect id="posetitelid" @bind-Value="Bilet.PosetitelId" class="form-control">
+                            <option value="">...</option>
+                            @if (Posetitels != null)
+                            {
+                                @foreach (var posetitel in Posetitels)
+                                {
+                                    <option value="@posetitel.PosetitelId">@posetitel.PosetitelName</option>
+                                }
+                            }
+
+                        </InputSelect>
+                        <ValidationMessage For="() => Bilet.PosetitelId" class="text-danger" />
+                    </div>
+                    <input type="hidden" name="Bilet.VistavkaId" id="posetitelid" @bind="Bilet.VistavkaId" />
+                }
+
+                @if (op == 2)
+                {
+                    <div class="mb-3">
+                        <label for="vistavkaid" class="form-label">Выставка:</label>
+                        <InputSelect id="vistavkaid" @bind-Value="Bilet.VistavkaId" class="form-control">
+                            <option value="">...</option>
+                            @if (Vistavkas != null)
+                            {
+                                @foreach (var vistavka in Vistavkas)
+                                {
+                                    <option value="@vistavka.VistavkaId">@vistavka.VistavkaName</option>
+                                }
+                            }
+
+                        </InputSelect>
+                        <ValidationMessage For="() => Bilet.VistavkaId" class="text-danger" />
+                    </div>
+                    <input type="hidden" name="Bilet.PosetitelId" id="vistavkaid" @bind="Bilet.PosetitelId" />
+                }
+
+                <div class="mb-3">
+                    <label for="datevisit" class="form-label">Дата посещения:</label>
+                    <InputDate id="datevisit" @bind-Value="Bilet.DateVisit" class="form-control" />
+                    <ValidationMessage For="() => Bilet.DateVisit" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Стоимость:</label>
+                    <InputNumber id="price" @bind-Value="Bilet.Price" class="form-control" />
+                    <ValidationMessage For="() => Bilet.Price" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="@($"bilets?id={id}&op={op}")">Возврат к списку билетов</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private int BiletId { get; set; }
+
+    [SupplyParameterFromQuery]
+    private int? op { get; set; }
+
+    [SupplyParameterFromQuery]
+    private int? id { get; set; }
+
+    [SupplyParameterFromForm]
+    private Bilet? Bilet { get; set; }
+
+    public IEnumerable<Vistavka> Vistavkas = default!;
+
+    public IEnumerable<Posetitel> Posetitels = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        Bilet ??= await context.Bilets.FirstOrDefaultAsync(m => m.BiletId == BiletId);
+
+        if (op == null || Bilet is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+
+        //
+        if (op == 1)
+        {
+            Posetitels = await context.Posetitels.ToListAsync();
+            id = Bilet!.VistavkaId;
+        }
+        else
+        {
+            Vistavkas = await context.Vistavkas.ToListAsync();
+            id = Bilet!.PosetitelId;
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdateBilet()
+    {
+        using var context = DbFactory.CreateDbContext();
+
+        Bilet!.Posetitel = null;
+        Bilet!.Vistavka = null;
+
+        context.Attach(Bilet!).State = EntityState.Modified;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!BiletExists(Bilet!.BiletId))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/bilets?id=" + id.ToString() + "&op=" + op.ToString());
+    }
+
+    private bool BiletExists(int biletid)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.Bilets.Any(e => e.BiletId == biletid);
+    }
+}

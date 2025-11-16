@@ -1,0 +1,117 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\qwer4\\Desktop\\lab2\\VistavkaApp\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D9E1BB1E-2303-47AD-9A7C-DE90C134EFC9}|VistavkaApp.csproj|c:\\users\\qwer4\\desktop\\lab2\\vistavkaapp\\components\\pages\\posetitelpages\\create.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D9E1BB1E-2303-47AD-9A7C-DE90C134EFC9}|VistavkaApp.csproj|solutionrelative:components\\pages\\posetitelpages\\create.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D9E1BB1E-2303-47AD-9A7C-DE90C134EFC9}|VistavkaApp.csproj|c:\\users\\qwer4\\desktop\\lab2\\vistavkaapp\\components\\pages\\biletpages\\create.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D9E1BB1E-2303-47AD-9A7C-DE90C134EFC9}|VistavkaApp.csproj|solutionrelative:components\\pages\\biletpages\\create.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D9E1BB1E-2303-47AD-9A7C-DE90C134EFC9}|VistavkaApp.csproj|c:\\users\\qwer4\\desktop\\lab2\\vistavkaapp\\components\\pages\\biletpages\\delete.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D9E1BB1E-2303-47AD-9A7C-DE90C134EFC9}|VistavkaApp.csproj|solutionrelative:components\\pages\\biletpages\\delete.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D9E1BB1E-2303-47AD-9A7C-DE90C134EFC9}|VistavkaApp.csproj|c:\\users\\qwer4\\desktop\\lab2\\vistavkaapp\\components\\pages\\biletpages\\details.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D9E1BB1E-2303-47AD-9A7C-DE90C134EFC9}|VistavkaApp.csproj|solutionrelative:components\\pages\\biletpages\\details.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D9E1BB1E-2303-47AD-9A7C-DE90C134EFC9}|VistavkaApp.csproj|c:\\users\\qwer4\\desktop\\lab2\\vistavkaapp\\components\\pages\\biletpages\\edit.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D9E1BB1E-2303-47AD-9A7C-DE90C134EFC9}|VistavkaApp.csproj|solutionrelative:components\\pages\\biletpages\\edit.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D9E1BB1E-2303-47AD-9A7C-DE90C134EFC9}|VistavkaApp.csproj|c:\\users\\qwer4\\desktop\\lab2\\vistavkaapp\\components\\pages\\biletpages\\index.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D9E1BB1E-2303-47AD-9A7C-DE90C134EFC9}|VistavkaApp.csproj|solutionrelative:components\\pages\\biletpages\\index.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Create.razor",
+              "DocumentMoniker": "C:\\Users\\qwer4\\Desktop\\lab2\\VistavkaApp\\Components\\Pages\\PosetitelPages\\Create.razor",
+              "RelativeDocumentMoniker": "Components\\Pages\\PosetitelPages\\Create.razor",
+              "ToolTip": "C:\\Users\\qwer4\\Desktop\\lab2\\VistavkaApp\\Components\\Pages\\PosetitelPages\\Create.razor",
+              "RelativeToolTip": "Components\\Pages\\PosetitelPages\\Create.razor",
+              "ViewState": "AgIAABgAAAAAAAAAAAAAACcAAABbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-17T06:01:48.827Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Create.razor",
+              "DocumentMoniker": "C:\\Users\\qwer4\\Desktop\\lab2\\VistavkaApp\\Components\\Pages\\BiletPages\\Create.razor",
+              "RelativeDocumentMoniker": "Components\\Pages\\BiletPages\\Create.razor",
+              "ToolTip": "C:\\Users\\qwer4\\Desktop\\lab2\\VistavkaApp\\Components\\Pages\\BiletPages\\Create.razor",
+              "RelativeToolTip": "Components\\Pages\\BiletPages\\Create.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-09-22T12:53:59.844Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Delete.razor",
+              "DocumentMoniker": "C:\\Users\\qwer4\\Desktop\\lab2\\VistavkaApp\\Components\\Pages\\BiletPages\\Delete.razor",
+              "RelativeDocumentMoniker": "Components\\Pages\\BiletPages\\Delete.razor",
+              "ToolTip": "C:\\Users\\qwer4\\Desktop\\lab2\\VistavkaApp\\Components\\Pages\\BiletPages\\Delete.razor",
+              "RelativeToolTip": "Components\\Pages\\BiletPages\\Delete.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-09-22T12:53:52.788Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Details.razor",
+              "DocumentMoniker": "C:\\Users\\qwer4\\Desktop\\lab2\\VistavkaApp\\Components\\Pages\\BiletPages\\Details.razor",
+              "RelativeDocumentMoniker": "Components\\Pages\\BiletPages\\Details.razor",
+              "ToolTip": "C:\\Users\\qwer4\\Desktop\\lab2\\VistavkaApp\\Components\\Pages\\BiletPages\\Details.razor",
+              "RelativeToolTip": "Components\\Pages\\BiletPages\\Details.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-09-22T12:53:46.212Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Edit.razor",
+              "DocumentMoniker": "C:\\Users\\qwer4\\Desktop\\lab2\\VistavkaApp\\Components\\Pages\\BiletPages\\Edit.razor",
+              "RelativeDocumentMoniker": "Components\\Pages\\BiletPages\\Edit.razor",
+              "ToolTip": "C:\\Users\\qwer4\\Desktop\\lab2\\VistavkaApp\\Components\\Pages\\BiletPages\\Edit.razor",
+              "RelativeToolTip": "Components\\Pages\\BiletPages\\Edit.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-09-22T12:53:39.194Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Index.razor",
+              "DocumentMoniker": "C:\\Users\\qwer4\\Desktop\\lab2\\VistavkaApp\\Components\\Pages\\BiletPages\\Index.razor",
+              "RelativeDocumentMoniker": "Components\\Pages\\BiletPages\\Index.razor",
+              "ToolTip": "C:\\Users\\qwer4\\Desktop\\lab2\\VistavkaApp\\Components\\Pages\\BiletPages\\Index.razor",
+              "RelativeToolTip": "Components\\Pages\\BiletPages\\Index.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-09-22T12:53:36.405Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

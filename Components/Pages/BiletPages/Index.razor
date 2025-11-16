@@ -1,0 +1,68 @@
+﻿@page "/bilets"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using VistavkaApp.Data
+@implements IAsyncDisposable
+@inject IDbContextFactory<VistavkaApp.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Билеты</PageTitle>
+
+<h1>Билеты</h1>
+
+@if(op==1)
+{
+    <p>
+        <a href="vistavkas">Возврат к списку выставок</a>
+    </p>
+}
+else
+{
+    <p>
+        <a href="posetitels">Возврат к списку посетителей</a>
+    </p>
+}
+
+<p>
+    <a href="@($"bilets/create?id={id}&op={op}")">Добавить</a> 
+</p>
+
+@* <QuickGrid Class="table" Items="context.Bilets"> *@
+<QuickGrid Class="table" Items="context.Bilets.Include(d=>d.Vistavka).Include(d=>d.Posetitel).Where(d=>op==1?d.VistavkaId==id:d.PosetitelId==id)">
+    <PropertyColumn Title="Имя посетителя" Property="bilet => bilet.Posetitel!.PosetitelName" />
+    <PropertyColumn Title="Название выставки" Property="bilet => bilet.Vistavka!.VistavkaName" />
+    <PropertyColumn Title="Дата посещения" Property="bilet => bilet.DateVisit" />
+    <PropertyColumn Title="Стоимость" Property="bilet => bilet.Price" />
+
+    <TemplateColumn Context="bilet">
+        <a href="@($"bilets/edit?biletid={bilet.BiletId}&op={op}")">Редактировать</a> |
+        <a href="@($"bilets/details?biletid={bilet.BiletId}&op={op}")">Просмотр</a> |
+        <a href="@($"bilets/delete?biletid={bilet.BiletId}&op={op}")">Удалить</a>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+    [SupplyParameterFromQuery]
+    private int? id { get; set; }
+
+    [SupplyParameterFromQuery]
+    private int? op { get; set; }
+
+    public IEnumerable<Vistavka> Vistavkas = default!;
+
+    public IEnumerable<Posetitel> Posetitels = default!;
+
+    private ApplicationDbContext context = default!;
+
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+
+        if (id==null || op==null)
+        {
+                NavigationManager.NavigateTo("not found");
+        }
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}

@@ -1,0 +1,70 @@
+﻿@page "/bilets/details"
+@using Microsoft.EntityFrameworkCore
+@using VistavkaApp.Data
+@inject IDbContextFactory<VistavkaApp.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Просмотр</PageTitle>
+
+<h1>Просмотр</h1>
+
+<div>
+    @* <h2>Билет</h2> *@
+    <hr />
+    @if (bilet is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Посетитель</dt>
+            <dd class="col-sm-10">@bilet!.Posetitel!.PosetitelName</dd>
+            <dt class="col-sm-2">Выставка</dt>
+            <dd class="col-sm-10">@bilet!.Vistavka!.VistavkaName</dd>
+            <dt class="col-sm-2">Дата посещения</dt>
+            <dd class="col-sm-10">@bilet.DateVisit</dd>
+            <dt class="col-sm-2">Стоимость</dt>
+            <dd class="col-sm-10">@bilet.Price</dd>
+        </dl>
+        <div>
+            <a href="@($"/bilets/edit?biletid={bilet.BiletId}&op={op}")">Редактировать</a> |
+            <a href="@($"/bilets?op={op}&id={id}")">Возврат к списку билетов</a>
+        </div>
+    }
+</div>
+
+@code {
+
+    [SupplyParameterFromQuery]
+    private int? op { get; set; }
+
+    [SupplyParameterFromQuery]
+    private int? id { get; set; }
+
+    private Bilet? bilet;
+
+    [SupplyParameterFromQuery]
+    private int BiletId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        bilet = await context.Bilets.Include(d => d.Posetitel).Include(d => d.Vistavka).FirstOrDefaultAsync(m => m.BiletId == BiletId);
+
+
+
+        if (bilet is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+        if (op == 1)
+        {
+            id = bilet!.VistavkaId;   
+        }
+        else
+        {
+            id = bilet!.PosetitelId;
+        }
+
+    }
+}

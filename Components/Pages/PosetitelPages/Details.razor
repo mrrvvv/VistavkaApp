@@ -1,0 +1,54 @@
+﻿@page "/posetitels/details"
+@using Microsoft.EntityFrameworkCore
+@using VistavkaApp.Data
+@inject IDbContextFactory<VistavkaApp.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Просмотр</PageTitle>
+
+<h1>Просмотр</h1>
+
+<div>
+    @* <h2>Posetitel</h2> *@
+    <hr />
+    @if (posetitel is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Имя</dt>
+            <dd class="col-sm-10">@posetitel.PosetitelName</dd>
+            <dt class="col-sm-2">Фамилия</dt>
+            <dd class="col-sm-10">@posetitel.PosetitelSurname</dd>
+            <dt class="col-sm-2">Дата рождения:</dt>
+            <dd class="col-sm-10">@posetitel.DateBirth</dd>
+            <dt class="col-sm-2">Телефон</dt>
+            <dd class="col-sm-10">@posetitel.Phone</dd>
+            <dt class="col-sm-2">Email</dt>
+            <dd class="col-sm-10">@posetitel.Email</dd>
+        </dl>
+        <div>
+            <a href="@($"/posetitels/edit?posetitelid={posetitel.PosetitelId}")">Редактировать</a> |
+            <a href="@($"/posetitels")">Возврат к списку посетителей</a>
+        </div>
+    }
+</div>
+
+@code {
+    private Posetitel? posetitel;
+
+    [SupplyParameterFromQuery]
+    private int PosetitelId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        posetitel = await context.Posetitels.FirstOrDefaultAsync(m => m.PosetitelId == PosetitelId);
+
+        if (posetitel is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

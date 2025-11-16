@@ -1,0 +1,54 @@
+﻿@page "/vistavkas/details"
+@using Microsoft.EntityFrameworkCore
+@using VistavkaApp.Data
+@inject IDbContextFactory<VistavkaApp.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Просмотр</PageTitle>
+
+<h1>Просмотр</h1>
+
+<div>
+    @* <h2>Vistavka</h2> *@
+    <hr />
+    @if (vistavka is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Название</dt>
+            <dd class="col-sm-10">@vistavka.VistavkaName</dd>
+            <dt class="col-sm-2">Описание</dt>
+            <dd class="col-sm-10">@vistavka.Description</dd>
+            <dt class="col-sm-2">Начало</dt>
+            <dd class="col-sm-10">@vistavka.DateStart</dd>
+            <dt class="col-sm-2">Конец</dt>
+            <dd class="col-sm-10">@vistavka.DateEnd</dd>
+            <dt class="col-sm-2">Место</dt>
+            <dd class="col-sm-10">@vistavka.Place</dd>
+        </dl>
+        <div>
+            <a href="@($"/vistavkas/edit?vistavkaid={vistavka.VistavkaId}")">Редактировать</a> |
+            <a href="@($"/vistavkas")">Возврат к списку выставок</a>
+        </div>
+    }
+</div>
+
+@code {
+    private Vistavka? vistavka;
+
+    [SupplyParameterFromQuery]
+    private int VistavkaId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        vistavka = await context.Vistavkas.FirstOrDefaultAsync(m => m.VistavkaId == VistavkaId);
+
+        if (vistavka is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

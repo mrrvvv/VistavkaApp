@@ -1,0 +1,64 @@
+﻿@page "/vistavkas/create"
+@using Microsoft.EntityFrameworkCore
+@using VistavkaApp.Data
+@inject IDbContextFactory<VistavkaApp.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Добавить</PageTitle>
+
+<h1>Добавить</h1>
+
+@* <h2>Vistavka</h2> *@
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="Vistavka" OnValidSubmit="AddVistavka" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" role="alert"/>
+            <div class="mb-3">
+                <label for="vistavkaname" class="form-label">Название:</label> 
+                <InputText id="vistavkaname" @bind-Value="Vistavka.VistavkaName" class="form-control" /> 
+                <ValidationMessage For="() => Vistavka.VistavkaName" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="description" class="form-label">Описание:</label> 
+                <InputText id="description" @bind-Value="Vistavka.Description" class="form-control" /> 
+                <ValidationMessage For="() => Vistavka.Description" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="datestart" class="form-label">Начало:</label> 
+                <InputDate id="datestart" @bind-Value="Vistavka.DateStart" class="form-control" /> 
+                <ValidationMessage For="() => Vistavka.DateStart" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="dateend" class="form-label">Конец:</label> 
+                <InputDate id="dateend" @bind-Value="Vistavka.DateEnd" class="form-control" /> 
+                <ValidationMessage For="() => Vistavka.DateEnd" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="place" class="form-label">Место:</label> 
+                <InputText id="place" @bind-Value="Vistavka.Place" class="form-control" /> 
+                <ValidationMessage For="() => Vistavka.Place" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Добавить</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/vistavkas">Возврат к списку выставок</a>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private Vistavka Vistavka { get; set; } = new();
+
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddVistavka()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Vistavkas.Add(Vistavka);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/vistavkas");
+    }
+}

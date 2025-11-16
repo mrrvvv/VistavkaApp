@@ -1,0 +1,81 @@
+﻿@page "/bilets/delete"
+@using Microsoft.EntityFrameworkCore
+@using VistavkaApp.Data
+@inject IDbContextFactory<VistavkaApp.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Удаление</PageTitle>
+
+<h1>Удаление</h1>
+
+<p>Вы уверены, что хотите удалить запись?</p>
+<div>
+    @* <h2>Билет</h2> *@
+    <hr />
+    @if (bilet is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Посетитель</dt>
+            <dd class="col-sm-10">@bilet!.Posetitel!.PosetitelName</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Выставка</dt>
+            <dd class="col-sm-10">@bilet!.Vistavka!.VistavkaName</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Дата посещения</dt>
+            <dd class="col-sm-10">@bilet.DateVisit</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Стоимость</dt>
+            <dd class="col-sm-10">@bilet.Price</dd>
+        </dl>
+        <EditForm method="post" Model="bilet" OnValidSubmit="DeleteBilet" FormName="delete" Enhance>
+            <button type="submit" class="btn btn-danger" disabled="@(bilet is null)">Удалить</button> |
+            <a href="@($"/bilets?op={op}&id={id}")">Возврат к списку билетов</a>
+        </EditForm>
+    }
+</div>
+
+@code {
+    private Bilet? bilet;
+
+    [SupplyParameterFromQuery]
+    private int BiletId { get; set; }
+
+    [SupplyParameterFromQuery]
+    private int? op { get; set; }
+
+    [SupplyParameterFromQuery]
+    private int? id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        bilet = await context.Bilets.Include(d => d.Posetitel).Include(d => d.Vistavka).FirstOrDefaultAsync(m => m.BiletId == BiletId);
+
+        if (bilet is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+        if (op == 1)
+        {
+            id = bilet!.VistavkaId;
+        }
+        else
+        {
+            id = bilet!.PosetitelId;
+        }
+    }
+
+    private async Task DeleteBilet()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Bilets.Remove(bilet!);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/bilets?op="+op.ToString()+"&id="+id.ToString());
+    }
+}

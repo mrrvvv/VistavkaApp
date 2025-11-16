@@ -1,0 +1,71 @@
+﻿@page "/posetitels/delete"
+@using Microsoft.EntityFrameworkCore
+@using VistavkaApp.Data
+@inject IDbContextFactory<VistavkaApp.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Удаление</PageTitle>
+
+<h1>Удаление</h1>
+
+<p>Вы уверены, что хотите удалить запись?</p>
+<div>
+    @* <h2>Posetitel</h2> *@
+    <hr />
+    @if (posetitel is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Имя</dt>
+            <dd class="col-sm-10">@posetitel.PosetitelName</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Фамилия</dt>
+            <dd class="col-sm-10">@posetitel.PosetitelSurname</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Дата рождения</dt>
+            <dd class="col-sm-10">@posetitel.DateBirth</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Телефон</dt>
+            <dd class="col-sm-10">@posetitel.Phone</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Email</dt>
+            <dd class="col-sm-10">@posetitel.Email</dd>
+        </dl>
+        <EditForm method="post" Model="posetitel" OnValidSubmit="DeletePosetitel" FormName="delete" Enhance>
+            <button type="submit" class="btn btn-danger" disabled="@(posetitel is null)">Удалить</button> |
+            <a href="/posetitels">Возврат к списку посетителей</a>
+        </EditForm>
+    }
+</div>
+
+@code {
+    private Posetitel? posetitel;
+
+    [SupplyParameterFromQuery]
+    private int PosetitelId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        posetitel = await context.Posetitels.FirstOrDefaultAsync(m => m.PosetitelId == PosetitelId);
+
+        if (posetitel is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    private async Task DeletePosetitel()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Posetitels.Remove(posetitel!);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/posetitels");
+    }
+}
