@@ -18,4 +18,4 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 EXPOSE 8080
-ENTRYPOINT ["dotnet", "VistavkaApp.dll"]
+CMD ["dotnet", "VistavkaApp.dll"]
